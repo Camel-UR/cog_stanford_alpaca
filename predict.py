@@ -21,10 +21,10 @@ class Predictor(BasePredictor):
         prompt: str = Input(description=f"Prompt to sened to model.", default=PROMPT),
         character: str = Input(description=f"Simpsons character to respond as", default="Homer Simpson"),
         n: int = Input(description="Number of output sequences to generate", default=1, ge=1, le=5),
-        max_length: int = Input(
-            description="Maximum number of tokens to generate. A word is generally 2-3 tokens",
+        total_tokens: int = Input(
+            description="Maximum number of tokens for input + generation. A word is generally 2-3 tokens",
             ge=1,
-            default=500
+            default=4000
         ),
         temperature: float = Input(
             description="Adjusts randomness of outputs, greater than 1 is random and 0 is deterministic, 0.75 is a good starting value.",
@@ -53,7 +53,7 @@ class Predictor(BasePredictor):
         outputs = self.model.generate(
             input,
             num_return_sequences=n,
-            max_length=max_length,
+            max_length=total_tokens,
             do_sample=True,
             temperature=temperature,
             top_p=top_p,
